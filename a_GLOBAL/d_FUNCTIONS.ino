@@ -47,11 +47,12 @@ void motor_test_run() {
   M2->run(RELEASE); 
   delay(2000);
 }
+
 void motor(int target_speed, int angle_velocity, int timestep){
   // speed, foward is positive; angular velocity: anti-clockwise is positive. 
   double m1, m2;
-  m1 = (target_speed+angle_velocity)/2;
-  m2 = (target_speed-angle_velocity)/2;
+  m1 = (target_speed+angle_velocity);
+  m2 = (target_speed-angle_velocity);
 
   M1->setSpeed((byte)abs(m1));
   M2->setSpeed((byte)abs(m2));
