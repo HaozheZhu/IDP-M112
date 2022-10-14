@@ -47,6 +47,37 @@ void motor_test_run() {
   M2->run(RELEASE); 
   delay(2000);
 }
+void motor(int target_speed, int angle_velocity, int timestep){
+  // speed, foward is positive; angular velocity: anti-clockwise is positive. 
+  double m1, m2;
+  m1 = (target_speed+angle_velocity)/2;
+  m2 = (target_speed-angle_velocity)/2;
+
+  M1->setSpeed((byte)abs(m1));
+  M2->setSpeed((byte)abs(m2));
+  
+  if (m1<0 and m2<0){
+    M1->run(BACKWARD);
+    M2->run(BACKWARD);
+  }
+  else if (m1<0 and m2 >=0){
+    M1->run(BACKWARD);
+    M2->run(FORWARD);
+  }
+   else if (m1>=0 and m2 <0){
+    M1->run(FORWARD);
+    M2->run(BACKWARD);
+  }
+  else
+  {
+      M1->run(FORWARD);
+      M2->run(FORWARD); 
+  }
+
+  delay(timestep);
+  M1->run(RELEASE);
+  M2->run(RELEASE);
+}
 
 void follow_line() {
     if(line_sensor_left==0 && line_sensor_right==0){
