@@ -124,3 +124,23 @@ void follow_line(int speed) {
     Serial.println("both on! "); 
   }
 }
+void line_following_linear(int target_speed){
+  static double error = 0;
+  // Issue, define the behaviour when the line is lost.
+  //Take sensor readings
+  int line_sensor_left_value = digitalRead(line_sensor_left); 
+  int line_sensor_right_value = digitalRead(line_sensor_right); 
+  int line_sensor_front_value = digitalRead(line_sensor_front); 
+  int line_sensor_back_value = digitalRead(line_sensor_back); 
+  // Calculate error in line (improve this)
+  if (line_sensor_left_value){
+    error +=1;
+  }
+  if (line_sensor_right_value){
+    error -=1;
+  }
+  if (!(line_sensor_left_value or line_sensor_right_value) and line_sensor_front_value and line_sensor_back_value) {
+  }
+  // Command motors
+  motor(target_speed, linePID.step(0.0, error), 10);
+}

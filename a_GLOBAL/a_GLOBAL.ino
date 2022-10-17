@@ -14,5 +14,6 @@ Adafruit_DCMotor *M2 = AFMS.getMotor(2);
 
 //initialise control loops
 float line_Kp=0.1, line_Ki=0.5, line_Kd=0, Hz=10;
-
-FastPID linePID(Kp, Ki, Kd, Hz, int output_bits = 8, bool output_signed = true);
+int output_bits = 8;
+bool output_signed = true;
+FastPID linePID(line_Kp, line_Ki, line_Kd, Hz,output_bits , output_signed);
