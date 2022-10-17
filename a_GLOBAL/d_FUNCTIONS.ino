@@ -142,5 +142,11 @@ void line_following_linear(int target_speed){
   if (!(line_sensor_left_value or line_sensor_right_value) and line_sensor_front_value and line_sensor_back_value) {
   }
   // Command motors
-  motor(target_speed, linePID.step(0.0, error), 10);
+  motor(target_speed, line_PID.step(0.0, error), 10);
+}
+void block_approach_line(){
+  //Best activated when the block is closeset
+  double target_speed;
+  target_speed = approach_PID.step(0, ultrasound.dist());
+  line_following_linear(target_speed);
 }

@@ -4,7 +4,7 @@
 #include <HCSR04.h>
 
 //initialise U/S sensor
-HCSR04 hc(5,6);
+HCSR04 ultrasound(US_trig, US_echo);
 #include <FastPID.h>
 
 //initialise motors
@@ -13,7 +13,9 @@ Adafruit_DCMotor *M1 = AFMS.getMotor(1);
 Adafruit_DCMotor *M2 = AFMS.getMotor(2);
 
 //initialise control loops
-float line_Kp=0.1, line_Ki=0.5, line_Kd=0, Hz=10;
+//line
+double Kpl=1, Kil=0, Kdl=0.01, Hz=10, Kpa=1, Kia=0, Kda=0.01;
 int output_bits = 8;
 bool output_signed = true;
-FastPID linePID(line_Kp, line_Ki, line_Kd, Hz,output_bits , output_signed);
+FastPID line_PID(Kpl, Kil, Kdl, Hz,output_bits , output_signed);
+FastPID approach_PID(Kpa, Kia, Kda, Hz,output_bits , output_signed);
