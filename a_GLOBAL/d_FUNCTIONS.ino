@@ -79,6 +79,20 @@ void motor(int target_speed, int angle_velocity, int timestep){
   M1->run(RELEASE);
   M2->run(RELEASE);
 }
+void line_following(int target_speed, int timestep){
+  int ang_vel;
+  int unit_vel = 255;
+  if(line_sensor_left==0 && line_sensor_right==0){
+    ang_vel = 0;
+  }
+  else if(line_sensor_left==1 && line_sensor_right==0){
+    ang_vel = unit_vel;
+  }
+  else if(line_sensor_left==0 && line_sensor_right==1){
+    ang_vel = -unit_vel; 
+  }
+  motor(target_speed, ang_vel, timestep);
+}
 
 void follow_line() {
     if(line_sensor_left==0 && line_sensor_right==0){
