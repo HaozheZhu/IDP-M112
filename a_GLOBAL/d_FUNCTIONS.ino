@@ -121,9 +121,10 @@ void follow_line(int speed) {
     motor(speed, -50, 100);
   }
   else{
-    Serial.println("both on! "); 
+    Serial.println("Error: both on! "); 
   }
 }
+
 void line_following_linear(int target_speed){
   static double error = 0;
   // Issue, define the behaviour when the line is lost.
