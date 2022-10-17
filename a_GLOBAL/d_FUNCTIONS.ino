@@ -99,6 +99,18 @@ void follow_line(int speed) {
   int line_sensor_right_value = digitalRead(line_sensor_right); 
   int line_sensor_front_value = digitalRead(line_sensor_front); 
   int line_sensor_back_value = digitalRead(line_sensor_back); 
+
+  if(true) {
+    Serial.print("Left = "); 
+    Serial.println(line_sensor_left_value); 
+    Serial.print("Right = "); 
+    Serial.println(line_sensor_right_value); 
+    Serial.print("Front = "); 
+    Serial.println(line_sensor_front_value); 
+    Serial.print("Back = "); 
+    Serial.println(line_sensor_back_value); 
+  }
+
   if(line_sensor_left_value==0 && line_sensor_right_value==0){
     motor(100, 0, 50); 
   }
