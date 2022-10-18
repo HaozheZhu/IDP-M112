@@ -139,10 +139,10 @@ void line_following_linear(int target_speed){
   int line_sensor_back_value = digitalRead(line_sensor_back); 
   // Calculate error in line (improve this)
   if (line_sensor_left_value){
-    error +=1;
+    error = 1;
   }
   if (line_sensor_right_value){
-    error -=1;
+    error =-1;
   }
   if (!(line_sensor_left_value or line_sensor_right_value) and line_sensor_front_value and line_sensor_back_value) {
   }
