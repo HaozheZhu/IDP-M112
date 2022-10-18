@@ -14,8 +14,6 @@ Adafruit_DCMotor *M2 = AFMS.getMotor(2);
 
 //initialise control loops
 //line
-double Kpl=1, Kil=0, Kdl=0.01, Hz=10, Kpa=1, Kia=0, Kda=0.01;
-int output_bits = 8;
-bool output_signed = true;
-FastPID line_PID(Kpl, Kil, Kdl, Hz,output_bits , output_signed);
-FastPID approach_PID(Kpa, Kia, Kda, Hz,output_bits , output_signed);
+double Hz=10;
+FastPID line_PID(line_following_proportianal, line_following_integral, line_following_derivative , Hz, PID_output_bits , PID_output_signed);
+FastPID approach_PID(block_approach_proportianal, block_approach_integral, block_approach_derivative, Hz, PID_output_bits , PID_output_signed);
