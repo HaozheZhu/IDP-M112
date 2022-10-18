@@ -16,6 +16,10 @@ void init_motors() {
   M2->setSpeed(250);
 }
 
+void init_hall(){
+  pinMode(hall_pin, INPUT); 
+}
+
 void steer_right() {
   M1->setSpeed(200); 
   M2->setSpeed(100); 
