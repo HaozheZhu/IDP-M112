@@ -19,6 +19,15 @@ void init_motors() {
 void init_hall(){
   pinMode(hall_pin, INPUT); 
 }
+void motor_interface(bool m1_forward, byte m1_speed, bool m2_forward, byte m2_speed){
+  //prevents unneeded comunication with motors
+  static bool m1_prev_forward = true;
+  static bool m2_prev_forward = true;
+  static byte m1_prev_speed = 0;
+  static byte m2_prev_speed = 0;
+  
+ //ask if motor can switch striaght between speeds/foward and reverse 
+}
 
 void motor(int target_speed, int angle_velocity, int timestep){
   // speed, foward is positive; angular velocity: anti-clockwise is positive. 
@@ -49,7 +58,7 @@ void motor(int target_speed, int angle_velocity, int timestep){
 
   delay(timestep);
   M1->run(RELEASE);
-  M2->run(RELEASE);
+  M2->run(RELEASE); 
 }
 
 void follow_line(int speed, int angular, int timestep) {
