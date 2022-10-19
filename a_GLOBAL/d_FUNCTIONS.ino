@@ -1,8 +1,8 @@
 void init_line_sensors() {
-  pinMode(line_sensor_front, INPUT);
-  pinMode(line_sensor_back, INPUT);
-  pinMode(line_sensor_left, INPUT);
-  pinMode(line_sensor_right, INPUT); 
+  pinMode(line_sensor_1, INPUT);
+  pinMode(line_sensor_2, INPUT);
+  pinMode(line_sensor_3, INPUT);
+  pinMode(line_sensor_4, INPUT); 
 }
 
 void init_motors() {
@@ -18,38 +18,6 @@ void init_motors() {
 
 void init_hall(){
   pinMode(hall_pin, INPUT); 
-}
-
-void steer_right() {
-  M1->setSpeed(200); 
-  M2->setSpeed(100); 
-  M1->run(FORWARD);
-  M2->run(FORWARD); 
-  delay(50);  
-  M1->run(RELEASE); 
-  M2->run(RELEASE); 
-} 
-
-void steer_left() {
-  M1->setSpeed(100); 
-  M2->setSpeed(200); 
-  M1->run(FORWARD);
-  M2->run(FORWARD); 
-  delay(50);  
-  M1->run(RELEASE); 
-  M2->run(RELEASE); 
-} 
-
-void motor_test_run() {
-  M1->run(FORWARD);
-  M2->run(FORWARD); 
-  delay(2000);
-  M1->run(BACKWARD);
-  M2->run(BACKWARD); 
-  delay(2000);
-  M1->run(RELEASE);
-  M2->run(RELEASE); 
-  delay(2000);
 }
 
 void motor(int target_speed, int angle_velocity, int timestep){
@@ -83,49 +51,19 @@ void motor(int target_speed, int angle_velocity, int timestep){
   M1->run(RELEASE);
   M2->run(RELEASE);
 }
-void line_following(int target_speed, int timestep){
-  int ang_vel;
-  int unit_vel = 255;
-  if(line_sensor_left==0 && line_sensor_right==0){
-    ang_vel = 0;
-  }
-  else if(line_sensor_left==1 && line_sensor_right==0){
-    ang_vel = unit_vel;
-  }
-  else if(line_sensor_left==0 && line_sensor_right==1){
-    ang_vel = -unit_vel; 
-  }
-  motor(target_speed, ang_vel, timestep);
-}
 
-void follow_line(int speed) {
-  int line_sensor_left_value = digitalRead(line_sensor_left); 
-  int line_sensor_right_value = digitalRead(line_sensor_right); 
-  int line_sensor_front_value = digitalRead(line_sensor_front); 
-  int line_sensor_back_value = digitalRead(line_sensor_back); 
-  if(true) {
-    Serial.print("Left = "); 
-    Serial.println(line_sensor_left_value); 
-    Serial.print("Right = "); 
-    Serial.println(line_sensor_right_value); 
-    Serial.print("Front = "); 
-    Serial.println(line_sensor_front_value); 
-    Serial.print("Back = "); 
-    Serial.println(line_sensor_back_value); 
-    Serial.println("------------------------");
-  }
+void follow_line(int speed, int angular, int timestep) {
+  int line_sensor_1_value = digitalRead(line_sensor_1); 
+  int line_sensor_2_value = digitalRead(line_sensor_2); 
 
-  if(line_sensor_left_value==0 && line_sensor_right_value==0){
-    motor(speed, 0, 100); 
+  if(line_sensor_1_value==1 && line_sensor_2_value==0){
+    motor(speed, angular, timestep); 
   }
-  else if(line_sensor_left_value==1 && line_sensor_right_value==0){
-    motor(speed, 50, 100); 
-  }
-  else if(line_sensor_left_value==0 && line_sensor_right_value==1){
-    motor(speed, -50, 100);
+  else if(line_sensor_1_value==0 && line_sensor_2_value==1){
+    motor(speed, -angular, timestep);
   }
   else{
-    Serial.println("Error: both on! "); 
+    motor(speed, angular, timestep); 
   }
 }
 
@@ -133,18 +71,16 @@ void line_following_linear(int target_speed){
   static double error = 0;
   // Issue, define the behaviour when the line is lost.
   //Take sensor readings
-  int line_sensor_left_value = digitalRead(line_sensor_left); 
-  int line_sensor_right_value = digitalRead(line_sensor_right); 
-  int line_sensor_front_value = digitalRead(line_sensor_front); 
-  int line_sensor_back_value = digitalRead(line_sensor_back); 
+  int line_sensor_1_value = digitalRead(line_sensor_1); 
+  int line_sensor_2_value = digitalRead(line_sensor_2); 
   // Calculate error in line (improve this)
-  if (line_sensor_left_value){
+  if (line_sensor_1_value){
     error = 1;
   }
-  if (line_sensor_right_value){
+  if (line_sensor_2_value){
     error =-1;
   }
-  if (!(line_sensor_left_value or line_sensor_right_value) and line_sensor_front_value and line_sensor_back_value) {
+  if (!(line_sensor_1_value or line_sensor_2_value) and line_sensor_1_value and line_sensor_2_value) {
   }
   // Command motors
   motor(target_speed, line_PID.step(0.0, error), 10);

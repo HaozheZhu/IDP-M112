@@ -1,4 +1,3 @@
-
 #include <Adafruit_MotorShield.h>
 #include "definitions.h"
 #include <HCSR04.h>
