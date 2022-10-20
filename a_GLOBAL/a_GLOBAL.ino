@@ -16,3 +16,6 @@ Adafruit_DCMotor *M2 = AFMS.getMotor(2);
 double Hz=10;
 FastPID line_PID(line_following_proportianal, line_following_integral, line_following_derivative , Hz, PID_output_bits , PID_output_signed);
 FastPID approach_PID(block_approach_proportianal, block_approach_integral, block_approach_derivative, Hz, PID_output_bits , PID_output_signed);
+
+bool m1_release = false;
+bool m2_release = false;
