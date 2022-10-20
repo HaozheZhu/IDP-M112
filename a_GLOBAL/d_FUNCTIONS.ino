@@ -19,14 +19,55 @@ void init_motors() {
 void init_hall(){
   pinMode(hall_pin, INPUT); 
 }
+void motor_release(bool m1, bool m2){
+  //prevents unneeded comunication with board be checking if motors are released.
+  // true to release
+  if (m1 and !(m1_release)){
+    M1->run(RELEASE);
+    m1_release = true;
+  }
+  if (m2 and !(m2_release)){
+    M2->run(RELEASE);
+    m2_release = true;
+  }
+}
 void motor_interface(bool m1_forward, byte m1_speed, bool m2_forward, byte m2_speed){
   //prevents unneeded comunication with motors
   static bool m1_prev_forward = true;
   static bool m2_prev_forward = true;
   static byte m1_prev_speed = 0;
   static byte m2_prev_speed = 0;
-  
+  if ((m1_prev_forward != m1_forward) or (m1_release and (m1_speed!=0))){
+    motor_release(true, false);  
+    if (m1_forward){
+      M1->run(FORWARD);
+    }
+    else{
+      M1->run(BACKWARD);
+    }
+    m1_prev_forward = m1_forward;
+    m1_release = false;
+  }
+  if ((m2_prev_forward != m2_forward)or m2_release){
+    motor_release(false, true);
+    if (m2_forward){
+      M2->run(FORWARD);
+    }
+    else{
+      M2->run(BACKWARD);
+    }
+    m2_prev_forward = m2_forward;
+    m2_release =false;
+  }
  //ask if motor can switch striaght between speeds/foward and reverse 
+  if (m1_prev_speed !=m1_speed){
+    M1->setSpeed(m1_speed);
+    m1_prev_speed = m1_speed;
+  }
+  if(m2_prev_speed !=m2_speed){
+    M2->setSpeed(m2_speed);
+    m2_prev_speed = m2_speed;
+  }
 }
 
 void motor(int target_speed, int angle_velocity, int timestep){
