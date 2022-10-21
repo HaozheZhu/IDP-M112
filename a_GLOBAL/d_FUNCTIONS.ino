@@ -134,11 +134,13 @@ void line_following_linear(int target_speed){
   }
   // Command motors
   motor(target_speed, line_PID.step(0.0, error), 10);
+  delay(100);
 }
 void block_approach_line(){
   //Best activated when the block is closeset
   double target_speed;
-  target_speed = approach_PID.step(0, ultrasound.dist());
+  target_speed = target_speed-approach_PID.step(10, ultrasound.dist());
+  // testing motor(target_speed, 0, 50);
   //line_following_linear(target_speed);
   //
 }
