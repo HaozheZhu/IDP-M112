@@ -14,30 +14,23 @@ void init_motors() {
   Serial.println("Motor Shield found.");
   M1->setSpeed(250);
   M2->setSpeed(250);
+  M1->run(RELEASE);
+  M2->run(RELEASE);
+  m1_state.direction = released;
+  m2_state.direction = released;
+  m1_state.speed = 250;
+  m2_state.speed = 250;
 }
 
 void init_hall(){
   pinMode(hall_pin, INPUT); 
 }
-void motor_release(bool m1, bool m2){
-  //prevents unneeded comunication with board be checking if motors are released.
-  // true to release
-  if (m1 and !(m1_release)){
-    M1->run(RELEASE);
-    m1_release = true;
-  }
-  if (m2 and !(m2_release)){
-    M2->run(RELEASE);
-    m2_release = true;
-  }
-}
-void motor_interface(bool m1_forward, byte m1_speed, bool m2_forward, byte m2_speed){
+
+void motor_interface(motor_direction  m1_dir, motor_direction m2_dir, byte m1_speed, byte m2_speed){
   //prevents unneeded comunication with motors
-  static bool m1_prev_forward = true;
-  static bool m2_prev_forward = true;
-  static byte m1_prev_speed = 0;
-  static byte m2_prev_speed = 0;
-  if ((m1_prev_forward != m1_forward) or (m1_release and (m1_speed!=0))){
+  //first update direction
+  
+  /*if ((m1_prev_forward != m1_forward) or (m1_release and (m1_speed!=0))){
     motor_release(true, false);  
     if (m1_forward){
       M1->run(FORWARD);
@@ -58,15 +51,44 @@ void motor_interface(bool m1_forward, byte m1_speed, bool m2_forward, byte m2_sp
     }
     m2_prev_forward = m2_forward;
     m2_release =false;
-  }
- //ask if motor can switch striaght between speeds/foward and reverse 
-  if (m1_prev_speed !=m1_speed){
+  }*/
+  //Then check speeds
+  if (m1_state.speed !=m1_speed){
     M1->setSpeed(m1_speed);
-    m1_prev_speed = m1_speed;
+    m1_state.speed = m1_speed;
   }
-  if(m2_prev_speed !=m2_speed){
+  if(m2_state.speed !=m2_speed){
     M2->setSpeed(m2_speed);
-    m2_prev_speed = m2_speed;
+    m2_state.speed = m2_speed;
+  }
+}
+void motor_release(motors motor_select = BOTH){
+  switch (motors):{
+    case BOTH:
+      if (m1_state.direction !=released){
+        M1->run(RELEASE);
+        m1_state.direction =released;
+      }
+      if (m2_state.direction !=released){
+        M2->run(RELEASE);
+        m2_state.direction =released;
+      }
+      break;
+    case MOTOR_M1:      
+      if (m1_state.direction !=released){
+        M1->run(RELEASE);
+        m1_state.direction =released;
+      }
+      break;  
+    case MOTOR_M2:
+      if (m1_state.direction !=released){
+        M1->run(RELEASE);
+        m1_state.direction =released;
+      }
+      break;
+
+    default:
+    Serial.println ("Error in motor_release, invalid selection of motors -  Must be BOTYH, LEFT or RIGHT");
   }
 }
 
@@ -101,6 +123,7 @@ void motor(int target_speed, int angle_velocity, int timestep){
   M1->run(RELEASE);
   M2->run(RELEASE); 
 }
+
 
 void follow_line(int speed, int angular, int timestep) {
   int line_sensor_1_value = digitalRead(line_sensor_1); 
