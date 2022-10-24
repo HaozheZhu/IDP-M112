@@ -153,17 +153,17 @@ void motor(int target_speed, int angle_velocity, int timestep){
 
 
 void follow_line(int speed, int angular, int timestep) {
-  int line_sensor_1_value = digitalRead(line_sensor_1); 
   int line_sensor_2_value = digitalRead(line_sensor_2); 
+  int line_sensor_3_value = digitalRead(line_sensor_3); 
 
-  if(line_sensor_1_value==1 && line_sensor_2_value==0){
+  if(line_sensor_2_value==1 && line_sensor_3_value==0){
     motor(speed, angular, timestep); 
   }
-  else if(line_sensor_1_value==0 && line_sensor_2_value==1){
+  else if(line_sensor_2_value==0 && line_sensor_3_value==1){
     motor(speed, -angular, timestep);
   }
   else{
-    motor(speed, angular, timestep); 
+    motor(speed, 0, timestep); 
   }
 }
 
@@ -230,10 +230,8 @@ void nav_once() {
 void block_approach_line(){
   //Best activated when the block is closeset
   double target_speed;
-  target_speed = target_speed-approach_PID.step(10, ultrasound_front(true));
-  // testing motor(target_speed, 0, 50);
-  //line_following_linear(target_speed);
-  //
+  target_speed = target_speed-approach_PID.step(3 , ultrasound_front(true));
+  follow_line(target_speed,30,30);
 }
 
 void follow_wall(double target_dist){

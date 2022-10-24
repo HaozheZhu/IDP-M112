@@ -18,9 +18,9 @@
 #define line_following_integral 0.1
 #define line_following_derivative 0.1
 //Block approach
-#define block_approach_proportianal 25.
-#define block_approach_integral 0.1
-#define block_approach_derivative 0.1
+#define block_approach_proportianal 10.
+#define block_approach_integral 0.
+#define block_approach_derivative 0.05
 
 double ultrasound_front(bool raw= true);
 double ultrasound_side(bool raw= true);
