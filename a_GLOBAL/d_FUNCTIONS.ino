@@ -26,6 +26,28 @@ void init_hall(){
   pinMode(hall_pin, INPUT); 
 }
 
+double ultrasound_front(bool raw){
+  static double running_total =0;
+  static HCSR04 sensor(US_trig, US_echo);
+  if (raw){
+    return sensor.dist();
+  }
+  else{
+    running_total = 0.5*(sensor.dist()+running_total);
+    return running_total;
+  }
+}
+double ultrasound_side(bool raw){
+  static double running_total =0;
+  static HCSR04 sensor(US_trig_s, US_echo_s);
+  if (raw){
+    return sensor.dist();
+  }
+  else{
+    running_total = 0.5*(sensor.dist()+running_total);
+    return running_total;
+  }
+}
 void motor_release(motor_select motors = BOTH){
   switch(motors){
     case BOTH:
@@ -167,14 +189,14 @@ void line_following_linear(int target_speed){
 void block_approach_line(){
   //Best activated when the block is closeset
   double target_speed;
-  target_speed = target_speed-approach_PID.step(10, US_front.dist());
+  target_speed = target_speed-approach_PID.step(10, ultrasound_front(true));
   // testing motor(target_speed, 0, 50);
   //line_following_linear(target_speed);
   //
 }
 
 void follow_wall(double target_dist){
-  static FastPID wall_PID(1 ,0.01 , 0 , 10, 7 , true);
-  target_dist = target_dist-wall_PID.step(10, US_right.dist());
+  static FastPID wall_PID(15 ,0.05 , 0 , 10, 8 , true);
+  target_dist = wall_PID.step(5, ultrasound_side(true));
   motor(150, target_dist, 50);
 }
