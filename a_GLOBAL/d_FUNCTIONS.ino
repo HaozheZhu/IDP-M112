@@ -153,17 +153,17 @@ void motor(int target_speed, int angle_velocity, int timestep){
 
 
 void follow_line(int speed, int angular, int timestep) {
-  int line_sensor_1_value = digitalRead(line_sensor_1); 
   int line_sensor_2_value = digitalRead(line_sensor_2); 
+  int line_sensor_3_value = digitalRead(line_sensor_3); 
 
-  if(line_sensor_1_value==1 && line_sensor_2_value==0){
+  if(line_sensor_2_value==1 && line_sensor_3_value==0){
     motor(speed, angular, timestep); 
   }
-  else if(line_sensor_1_value==0 && line_sensor_2_value==1){
+  else if(line_sensor_2_value==0 && line_sensor_3_value==1){
     motor(speed, -angular, timestep);
   }
   else{
-    motor(speed, angular, timestep); 
+    motor(speed, 0, timestep); 
   }
 }
 
@@ -172,22 +172,11 @@ void nav_once() {
   int line_sensor_2_value = digitalRead(line_sensor_2); 
   int line_sensor_3_value = digitalRead(line_sensor_3); 
   int line_sensor_4_value = digitalRead(line_sensor_4); 
-  if(false) {
-    Serial.print("Line sensor 1 = "); 
-    Serial.println(line_sensor_1_value); 
-    Serial.print("Line sensor 2 = "); 
-    Serial.println(line_sensor_2_value); 
-    Serial.print("Line sensor 3 = "); 
-    Serial.println(line_sensor_3_value); 
-    Serial.print("Line sensor 4 = "); 
-    Serial.println(line_sensor_4_value); 
-    Serial.println("------------------------");
-    delay(0); 
-  }
+  
   if(line_sensor_1_value == 0 && line_sensor_4_value == 0) {
     //follow line
     Serial.println("Following line"); 
-    follow_line(100,60,30); 
+    follow_line(250,50,200); 
   }
   else {
     //at junctions

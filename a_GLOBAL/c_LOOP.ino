@@ -1,4 +1,4 @@
 void loop() {
   nav_once(); 
-  delay(300); 
+  delay(10); 
 }
