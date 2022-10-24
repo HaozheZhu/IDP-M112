@@ -25,46 +25,7 @@ void init_motors() {
 void init_hall(){
   pinMode(hall_pin, INPUT); 
 }
-/*
-void motor_interface(motor_direction  m1_dir, motor_direction m2_dir, byte m1_speed, byte m2_speed){
-  //prevents unneeded comunication with motors
-  //first update direction
-  if (m1_state.direction != m1_dir){
-    
-  }
-  /*if ((m1_prev_forward != m1_forward) or (m1_release and (m1_speed!=0))){
-    motor_release(true, false);  
-    if (m1_forward){
-      M1->run(FORWARD);
-    }
-    else{
-      M1->run(BACKWARD);
-    }
-    m1_prev_forward = m1_forward;
-    m1_release = false;
-  }
-  if ((m2_prev_forward != m2_forward)or m2_release){
-    motor_release(false, true);
-    if (m2_forward){
-      M2->run(FORWARD);
-    }
-    else{
-      M2->run(BACKWARD);
-    }
-    m2_prev_forward = m2_forward;
-    m2_release =false;
-  }
-  //Then check speeds
-  if (m1_state.speed !=m1_speed){
-    M1->setSpeed(m1_speed);
-    m1_state.speed = m1_speed;
-  }
-  if(m2_state.speed !=m2_speed){
-    M2->setSpeed(m2_speed);
-    m2_state.speed = m2_speed;
-  }
-}
-*/
+
 void motor_release(motor_select motors = BOTH){
   switch(motors){
     case BOTH:
@@ -94,6 +55,47 @@ void motor_release(motor_select motors = BOTH){
     Serial.println ("Error in motor_release, invalid selection of motors -  Must be BOTYH, LEFT or RIGHT");
   }
 }
+void motor_interface(byte  m1_dir, byte m2_dir, byte m1_speed, byte m2_speed){
+  //prevents unneeded comunication with motors
+  //first update direction
+  if ((m1_state.direction != m1_dir) and (m2_state.direction != m2_dir)){
+    if ((m1_state.direction != RELEASE)or(m2_state.direction!=RELEASE)){
+      motor_release(BOTH);
+      delay(5);
+      M1->run(m1_dir);
+      m1_state.direction= m1_dir;
+      M2->run(m2_dir);
+      m2_state.direction= m2_dir;
+    }
+  }
+  else if (m1_state.direction != m1_dir){
+    if (m1_state.direction != RELEASE){
+      motor_release(MOTOR_M1);
+      delay(5);
+    }
+    M1->run(m1_dir);
+    m1_state.direction= m1_dir;
+  }
+  else if (m2_state.direction != m2_dir){
+    if (m2_state.direction != RELEASE){
+      motor_release(MOTOR_M2);
+      delay(5);
+    }
+    M2->run(m2_dir);
+    m2_state.direction= m2_dir;
+  }
+  
+  //Then check speeds
+  if (m1_state.speed !=m1_speed){
+    M1->setSpeed(m1_speed);
+    m1_state.speed = m1_speed;
+  }
+  if(m2_state.speed !=m2_speed){
+    M2->setSpeed(m2_speed);
+    m2_state.speed = m2_speed;
+  }
+}
+
 
 void motor(int target_speed, int angle_velocity, int timestep){
   // speed, foward is positive; angular velocity: anti-clockwise is positive. 
