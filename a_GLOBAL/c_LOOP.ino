@@ -19,36 +19,8 @@ void loop() {
     Serial.println("------------------------");
     delay(0); 
   }
-<<<<<<< Updated upstream
-  /*
-  if(line_sensor_3_value == 0 && line_sensor_4_value == 0) {
-    //going off the line
-    follow_line(100,20,100); 
-  }
-  if(line_sensor_3_value == 1 && line_sensor_4_value == 1) {
-    Serial.println("At cross"); 
-    delay(3000); 
-    follow_line(250,0,500); 
-  }
-  if(line_sensor_3_value == 1 && line_sensor_4_value == 0) {
-    Serial.println("At left junction"); 
-    delay(3000); 
-    follow_line(250,0,500); 
-  }
-  if(line_sensor_3_value == 0 && line_sensor_4_value == 1) {
-    Serial.println("At right junction"); 
-    delay(3000); 
-    follow_line(250,0,500); 
-  }
-  */
-  if (US_front.dist()> 0.0){
-    block_approach_line();
-  }
-  
-=======
   
   nav_once();   
->>>>>>> Stashed changes
   //block_approach_line();
 
 }
