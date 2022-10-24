@@ -157,10 +157,10 @@ void follow_line(int speed, int angular, int timestep) {
   int line_sensor_3_value = digitalRead(line_sensor_3); 
 
   if(line_sensor_2_value==1 && line_sensor_3_value==0){
-    motor(speed, angular, timestep); 
+    motor(speed, -angular, timestep); 
   }
   else if(line_sensor_2_value==0 && line_sensor_3_value==1){
-    motor(speed, -angular, timestep);
+    motor(speed, angular, timestep);
   }
   else{
     motor(speed, 0, timestep); 
@@ -176,7 +176,7 @@ void nav_once() {
   if(line_sensor_1_value == 0 && line_sensor_4_value == 0) {
     //follow line
     Serial.println("Following line"); 
-    follow_line(250,50,200); 
+    follow_line(100,100,100); 
   }
   else {
     //at junctions
