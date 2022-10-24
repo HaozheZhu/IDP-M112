@@ -196,7 +196,7 @@ void block_approach_line(){
 }
 
 void follow_wall(double target_dist){
-  static FastPID wall_PID(1 ,0.01 , 0 , 10, 7 , true);
-  target_dist = -wall_PID.step(10, ultrasound_side(true));
+  static FastPID wall_PID(15 ,0.05 , 0 , 10, 8 , true);
+  target_dist = wall_PID.step(5, ultrasound_side(true));
   motor(150, target_dist, 50);
 }
