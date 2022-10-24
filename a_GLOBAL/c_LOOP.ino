@@ -6,7 +6,7 @@ void loop() {
   int line_sensor_3_value = digitalRead(line_sensor_3); 
   int line_sensor_4_value = digitalRead(line_sensor_4); 
   if(true) {
-    Serial.print("Line sensor 1 = "); 
+    /*Serial.print("Line sensor 1 = "); 
     Serial.println(line_sensor_1_value); 
     Serial.print("Line sensor 2 = "); 
     Serial.println(line_sensor_2_value); 
@@ -14,9 +14,12 @@ void loop() {
     Serial.println(line_sensor_3_value); 
     Serial.print("Line sensor 4 = "); 
     Serial.println(line_sensor_4_value); 
+    Serial.print("Ultrasound = "); */
+    Serial.println(ultrasound.dist()); 
     Serial.println("------------------------");
     delay(0); 
   }
+  /*
   if(line_sensor_3_value == 0 && line_sensor_4_value == 0) {
     //going off the line
     follow_line(100,20,100); 
@@ -36,5 +39,11 @@ void loop() {
     delay(3000); 
     follow_line(250,0,500); 
   }
+  */
+  if (ultrasound.dist()> 0.0){
+    block_approach_line();
+  }
+  
+  //block_approach_line();
 
 }

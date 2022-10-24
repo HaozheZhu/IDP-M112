@@ -17,5 +17,18 @@ double Hz=10;
 FastPID line_PID(line_following_proportianal, line_following_integral, line_following_derivative , Hz, PID_output_bits , PID_output_signed);
 FastPID approach_PID(block_approach_proportianal, block_approach_integral, block_approach_derivative, Hz, PID_output_bits , PID_output_signed);
 
-bool m1_release = false;
-bool m2_release = false;
+//Create structures for holding state data
+enum motor_direction{
+  forward,
+  backward,
+  released //Not release as release is a reserved term.
+};
+enum motor_select{
+  MOTOR_M1,
+  MOTOR_M2,
+  BOTH
+};
+struct motor_state{
+  motor_direction direction;
+  byte speed;
+}m1_state, m2_state;
