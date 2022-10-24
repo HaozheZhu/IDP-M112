@@ -219,14 +219,18 @@ void nav_once() {
 void block_approach_line(){
   //Best activated when the block is closeset
   double target_speed;
-  target_speed = target_speed-approach_PID.step(10, ultrasound_front(true));
-  // testing motor(target_speed, 0, 50);
-  //line_following_linear(target_speed);
-  //
+  target_speed = target_speed-approach_PID.step(3 , ultrasound_front(true));
+  follow_line(target_speed,30,30);
 }
 
 void follow_wall(double target_dist){
   static FastPID wall_PID(15 ,0.05 , 0 , 10, 8 , true);
   target_dist = wall_PID.step(5, ultrasound_side(true));
   motor(150, target_dist, 50);
+}
+bool dectect_tunnel(){
+  if(ultrasound_side() < 20.0){
+    return true;
+  }
+  else{return false;}
 }
