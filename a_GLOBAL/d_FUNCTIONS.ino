@@ -241,3 +241,9 @@ void follow_wall(double target_dist){
   target_dist = wall_PID.step(5, ultrasound_side(true));
   motor(150, target_dist, 50);
 }
+bool dectect_tunnel(){
+  if(ultrasound_side() < 20.0){
+    return true;
+  }
+  else{return false;}
+}
