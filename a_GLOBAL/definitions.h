@@ -22,5 +22,8 @@
 #define block_approach_integral 0.1
 #define block_approach_derivative 0.1
 
-double ultrasound_front(bool raw= false);
-double ultrasound_side(bool raw= false);
+double ultrasound_front(bool raw= true);
+double ultrasound_side(bool raw= true);
+bool dectect_tunnel();
+bool have_block =false;
+bool magnetic_block = false;
