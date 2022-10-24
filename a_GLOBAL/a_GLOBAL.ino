@@ -3,8 +3,10 @@
 #include <HCSR04.h>
 
 //initialise U/S sensor
+/*
 HCSR04 US_front(US_trig, US_echo);
 HCSR04 US_right(US_trig_r,US_echo_r);
+*/
 #include <FastPID.h>
 
 //initialise motors

@@ -7,10 +7,10 @@
 #define servo_pin_two 10 
 #define hall_pin 11 // Temp, here to allow compilation
 // Pins for ultrasound
-#define US_trig 1
-#define US_echo 0
-#define US_trig_r 1
-#define US_echo_r 0
+#define US_trig 12
+#define US_echo 11
+#define US_trig_s 12
+#define US_echo_s 11
 //Constants for PID controller setup
 #define PID_output_bits 8
 #define PID_output_signed true
@@ -21,3 +21,6 @@
 #define block_approach_proportianal 25.
 #define block_approach_integral 0.1
 #define block_approach_derivative 0.1
+
+double ultrasound_front(bool raw= false);
+double ultrasound_side(bool raw= false);

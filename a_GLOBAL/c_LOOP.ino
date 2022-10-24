@@ -15,11 +15,17 @@ void loop() {
     Serial.print("Line sensor 4 = "); 
     Serial.println(line_sensor_4_value); 
     Serial.print("Ultrasound = "); */
-    Serial.println(US_front.dist()); 
+    Serial.println("Front");
+    Serial.println(ultrasound_front(true));
+    Serial.println(ultrasound_front()); 
+    Serial.println("Side:");
+    Serial.println(ultrasound_side(true)); 
+    Serial.println(ultrasound_side()); 
     Serial.println("------------------------");
-    delay(0); 
+    delay(10); 
   }
-  
+  //follow_wall(10);
+  //delay(1000);
 
   //block_approach_line();
 
