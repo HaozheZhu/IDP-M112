@@ -67,28 +67,63 @@ void follow_line(int speed, int angular, int timestep) {
   }
 }
 
-void line_following_linear(int target_speed){
-  static double error = 0;
-  // Issue, define the behaviour when the line is lost.
-  //Take sensor readings
+void nav_once() {
   int line_sensor_1_value = digitalRead(line_sensor_1); 
   int line_sensor_2_value = digitalRead(line_sensor_2); 
-  // Calculate error in line (improve this)
-  if (line_sensor_1_value){
-    error = 1;
+  int line_sensor_3_value = digitalRead(line_sensor_3); 
+  int line_sensor_4_value = digitalRead(line_sensor_4); 
+  if(false) {
+    Serial.print("Line sensor 1 = "); 
+    Serial.println(line_sensor_1_value); 
+    Serial.print("Line sensor 2 = "); 
+    Serial.println(line_sensor_2_value); 
+    Serial.print("Line sensor 3 = "); 
+    Serial.println(line_sensor_3_value); 
+    Serial.print("Line sensor 4 = "); 
+    Serial.println(line_sensor_4_value); 
+    Serial.println("------------------------");
+    delay(0); 
   }
-  if (line_sensor_2_value){
-    error =-1;
+  if(line_sensor_1_value == 0 && line_sensor_4_value == 0) {
+    //follow line
+    Serial.println("Following line"); 
+    follow_line(100,60,30); 
   }
-  if (!(line_sensor_1_value or line_sensor_2_value) and line_sensor_1_value and line_sensor_2_value) {
+  else {
+    //at junctions
+    if(line_sensor_1_value == 1 && line_sensor_4_value == 1) {
+      Serial.println("At cross"); 
+      delay(3000); 
+      follow_line(250,0,500); 
+    }
+    if(line_sensor_1_value == 1 && line_sensor_4_value == 0) {
+      follow_line(100,0,500);
+      delay(1000);
+      if(line_sensor_1_value == 1 && line_sensor_4_value == 1) {
+        Serial.println("At cross"); 
+        delay(3000); 
+        follow_line(250,0,500); 
+      }
+      else if(line_sensor_1_value == 1 && line_sensor_4_value == 0) {
+        Serial.println("At left junction"); 
+        delay(10000); 
+        follow_line(250,0,500); 
+      }
+    }
+    if(line_sensor_1_value == 0 && line_sensor_4_value == 1) {
+      follow_line(100,0,500);
+      delay(1000); 
+      if(line_sensor_1_value == 1 && line_sensor_4_value == 1) {
+        Serial.println("At cross"); 
+        delay(3000); 
+        follow_line(250,0,500); 
+      }
+      else if(line_sensor_1_value == 0 && line_sensor_4_value == 1) {
+        Serial.println("At right junction"); 
+        delay(3000); 
+        follow_line(250,0,500); 
+      }
+    }
   }
-  // Command motors
-  motor(target_speed, line_PID.step(0.0, error), 10);
-}
-void block_approach_line(){
-  //Best activated when the block is closeset
-  double target_speed;
-  target_speed = approach_PID.step(0, ultrasound.dist());
-  //line_following_linear(target_speed);
-  //
-}
+}  
+  
