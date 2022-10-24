@@ -1,4 +1,3 @@
-
 class motor_shield_interface{
     bool m1_forward, m2_forward, m1_release, m2_release;
     byte m1_speed, m2_speed;
