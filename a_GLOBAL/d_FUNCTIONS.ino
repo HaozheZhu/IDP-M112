@@ -176,7 +176,7 @@ void nav_once() {
   if(line_sensor_1_value == 0 && line_sensor_4_value == 0) {
     //follow line
     Serial.println("Following line"); 
-    follow_line(200,50,200); 
+    follow_line(100,100,100); 
   }
   else {
     //at junctions
