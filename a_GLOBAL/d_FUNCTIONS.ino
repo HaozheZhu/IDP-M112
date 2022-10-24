@@ -16,8 +16,8 @@ void init_motors() {
   M2->setSpeed(250);
   M1->run(RELEASE);
   M2->run(RELEASE);
-  m1_state.direction = released;
-  m2_state.direction = released;
+  m1_state.direction = RELEASE;
+  m2_state.direction = RELEASE;
   m1_state.speed = 250;
   m2_state.speed = 250;
 }
@@ -25,11 +25,13 @@ void init_motors() {
 void init_hall(){
   pinMode(hall_pin, INPUT); 
 }
-
+/*
 void motor_interface(motor_direction  m1_dir, motor_direction m2_dir, byte m1_speed, byte m2_speed){
   //prevents unneeded comunication with motors
   //first update direction
-  
+  if (m1_state.direction != m1_dir){
+    
+  }
   /*if ((m1_prev_forward != m1_forward) or (m1_release and (m1_speed!=0))){
     motor_release(true, false);  
     if (m1_forward){
@@ -51,7 +53,7 @@ void motor_interface(motor_direction  m1_dir, motor_direction m2_dir, byte m1_sp
     }
     m2_prev_forward = m2_forward;
     m2_release =false;
-  }*/
+  }
   //Then check speeds
   if (m1_state.speed !=m1_speed){
     M1->setSpeed(m1_speed);
@@ -62,28 +64,29 @@ void motor_interface(motor_direction  m1_dir, motor_direction m2_dir, byte m1_sp
     m2_state.speed = m2_speed;
   }
 }
-void motor_release(motors motor_select = BOTH){
-  switch (motors):{
+*/
+void motor_release(motor_select motors = BOTH){
+  switch(motors){
     case BOTH:
-      if (m1_state.direction !=released){
+      if (m1_state.direction !=RELEASE){
         M1->run(RELEASE);
-        m1_state.direction =released;
+        m1_state.direction =RELEASE;
       }
-      if (m2_state.direction !=released){
+      if (m2_state.direction !=RELEASE){
         M2->run(RELEASE);
-        m2_state.direction =released;
+        m2_state.direction =RELEASE;
       }
       break;
     case MOTOR_M1:      
-      if (m1_state.direction !=released){
+      if (m1_state.direction !=RELEASE){
         M1->run(RELEASE);
-        m1_state.direction =released;
+        m1_state.direction =RELEASE;
       }
       break;  
     case MOTOR_M2:
-      if (m1_state.direction !=released){
+      if (m1_state.direction !=RELEASE){
         M1->run(RELEASE);
-        m1_state.direction =released;
+        m1_state.direction =RELEASE;
       }
       break;
 
@@ -162,8 +165,13 @@ void line_following_linear(int target_speed){
 void block_approach_line(){
   //Best activated when the block is closeset
   double target_speed;
-  target_speed = target_speed-approach_PID.step(10, ultrasound.dist());
+  target_speed = target_speed-approach_PID.step(10, US_front.dist());
   // testing motor(target_speed, 0, 50);
   //line_following_linear(target_speed);
   //
+}
+void follow_wall(double target_dist){
+  static FastPID wall_PID(1 ,0.01 , 0 , 10, 7 , true);
+  target_dist = target_dist-wall_PID.step(10, US_right.dist());
+  motor(150, target_dist, 50);
 }

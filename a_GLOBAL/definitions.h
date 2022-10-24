@@ -9,6 +9,8 @@
 // Pins for ultrasound
 #define US_trig 1
 #define US_echo 0
+#define US_trig_r 1
+#define US_echo_r 0
 //Constants for PID controller setup
 #define PID_output_bits 8
 #define PID_output_signed true

@@ -15,7 +15,7 @@ void loop() {
     Serial.print("Line sensor 4 = "); 
     Serial.println(line_sensor_4_value); 
     Serial.print("Ultrasound = "); */
-    Serial.println(ultrasound.dist()); 
+    Serial.println(US_front.dist()); 
     Serial.println("------------------------");
     delay(0); 
   }
@@ -40,7 +40,7 @@ void loop() {
     follow_line(250,0,500); 
   }
   */
-  if (ultrasound.dist()> 0.0){
+  if (US_front.dist()> 0.0){
     block_approach_line();
   }
   
