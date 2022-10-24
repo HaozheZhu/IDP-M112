@@ -19,6 +19,7 @@ void loop() {
     Serial.println("------------------------");
     delay(0); 
   }
+<<<<<<< Updated upstream
   /*
   if(line_sensor_3_value == 0 && line_sensor_4_value == 0) {
     //going off the line
@@ -44,6 +45,10 @@ void loop() {
     block_approach_line();
   }
   
+=======
+  
+  nav_once();   
+>>>>>>> Stashed changes
   //block_approach_line();
 
 }

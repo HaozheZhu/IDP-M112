@@ -26,8 +26,51 @@ void init_hall(){
   pinMode(hall_pin, INPUT); 
 }
 
+<<<<<<< Updated upstream
 void motor_release(motor_select motors = BOTH){
   switch(motors){
+=======
+
+void motor_interface(motor_direction  m1_dir, motor_direction m2_dir, byte m1_speed, byte m2_speed){
+  //prevents unneeded comunication with motors
+  //first update direction
+  
+  /*if ((m1_prev_forward != m1_forward) or (m1_release and (m1_speed!=0))){
+    motor_release(true, false);  
+    if (m1_forward){
+      M1->run(FORWARD);
+    }
+    else{
+      M1->run(BACKWARD);
+    }
+    m1_prev_forward = m1_forward;
+    m1_release = false;
+  }
+  if ((m2_prev_forward != m2_forward)or m2_release){
+    motor_release(false, true);
+    if (m2_forward){
+      M2->run(FORWARD);
+    }
+    else{
+      M2->run(BACKWARD);
+    }
+    m2_prev_forward = m2_forward;
+    m2_release =false;
+  }*/
+  //Then check speeds
+  if (m1_state.speed !=m1_speed){
+    M1->setSpeed(m1_speed);
+    m1_state.speed = m1_speed;
+  }
+  if(m2_state.speed !=m2_speed){
+    M2->setSpeed(m2_speed);
+    m2_state.speed = m2_speed;
+  }
+}
+
+void motor_release(motors motor_select = BOTH){
+  switch (motors):{
+>>>>>>> Stashed changes
     case BOTH:
       if (m1_state.direction !=RELEASE){
         M1->run(RELEASE);
