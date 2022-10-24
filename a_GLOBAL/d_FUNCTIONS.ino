@@ -177,25 +177,4 @@ void follow_wall(double target_dist){
   static FastPID wall_PID(1 ,0.01 , 0 , 10, 7 , true);
   target_dist = target_dist-wall_PID.step(10, US_right.dist());
   motor(150, target_dist, 50);
-
-void nav_once(){
-  if(line_sensor_3_value == 0 && line_sensor_4_value == 0) {
-    //going off the line
-    follow_line(100,20,100); 
-  }
-  if(line_sensor_3_value == 1 && line_sensor_4_value == 1) {
-    Serial.println("At cross"); 
-    delay(3000); 
-    follow_line(250,0,500); 
-  }
-  if(line_sensor_3_value == 1 && line_sensor_4_value == 0) {
-    Serial.println("At left junction"); 
-    delay(3000); 
-    follow_line(250,0,500); 
-  }
-  if(line_sensor_3_value == 0 && line_sensor_4_value == 1) {
-    Serial.println("At right junction"); 
-    delay(3000); 
-    follow_line(250,0,500); 
-  }
 }

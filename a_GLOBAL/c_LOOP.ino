@@ -20,7 +20,6 @@ void loop() {
     delay(0); 
   }
   
-  nav_once();   
 
   //block_approach_line();
 
