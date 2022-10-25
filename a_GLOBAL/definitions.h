@@ -7,8 +7,8 @@
 #define servo_pin_two 10 
 #define hall_pin 11 // Temp, here to allow compilation
 // Pins for ultrasound
-#define US_trig 12
-#define US_echo 11
+#define US_trig 6 //green
+#define US_echo 7 //orange
 #define US_trig_s 12
 #define US_echo_s 11
 //Constants for PID controller setup
