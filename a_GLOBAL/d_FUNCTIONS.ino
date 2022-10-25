@@ -216,14 +216,15 @@ void nav_once() {
   }
 }  
 
-void block_approach_line(){
+bool block_approach_line(){
   //Best activated when the block is closeset
   double dist_front = ultrasound_front(1); 
   if (dist_front<5.0){
     M1->run(BRAKE);
     M2->run(BRAKE);
-    delay(10000);
+    return true;
   }
+  return false;
 }
 
 void follow_wall(double target_dist){

@@ -30,3 +30,12 @@ struct motor_state{
   byte direction; //foward =1 , back =2, 3 =brake, 4 = release
   byte speed;
 }m1_state, m2_state;
+enum robotState{
+  START,
+  JUNCTION,
+  CROSS,
+  LINE_FOLLOWING,
+  APROACH_BLOCK,
+  GRAB_BLOCK,
+  TUNNEL,
+}robot_state;

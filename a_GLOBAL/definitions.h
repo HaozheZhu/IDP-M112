@@ -24,6 +24,7 @@
 
 double ultrasound_front(bool raw= true);
 double ultrasound_side(bool raw= true);
+bool block_approach_line();
 bool dectect_tunnel();
 bool have_block =false;
 bool magnetic_block = false;
