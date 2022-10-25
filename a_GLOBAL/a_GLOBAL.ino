@@ -20,6 +20,8 @@ double Hz=10;
 FastPID line_PID(line_following_proportianal, line_following_integral, line_following_derivative , Hz, PID_output_bits , PID_output_signed);
 FastPID approach_PID(block_approach_proportianal, block_approach_integral, block_approach_derivative, Hz, PID_output_bits , PID_output_signed);
 
+bool have_block =false;
+bool magnetic_block = false;
 
 enum motor_select{
   MOTOR_M1,
