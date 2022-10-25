@@ -12,7 +12,7 @@ void setup()
   servo_grab.attach(9); //servo 2
   servo_lift.attach(10); //servo 1
   servo_lift.write(150); 
-  servo_grab.write(58);    
+  servo_grab.write(60);    
   delay(2000);
 
 }
@@ -20,5 +20,5 @@ void setup()
 void loop()
 { 
   Serial.println( hc.dist() ); 
-  delay(500); 
+  delay(100); 
 }//return curent distance in serial
