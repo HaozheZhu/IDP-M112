@@ -135,11 +135,23 @@ void nav_once() {
   }
 }  
 
-void follow_wall(double target_dist){
-  static FastPID wall_PID(15 ,0.05 , 0 , 10, 8 , true);
-  target_dist = wall_PID.step(5, US_side.dist());
-  motor(250, target_dist, 50);
+void follow_wall(double target_dist, double dist){ 
+  if(dist>2.0){
+    if(dist<target_dist) {
+      motor(250, 150, 20); 
+      Serial.println("turn right"); 
+    }
+    else if(dist>target_dist) {
+      motor(150, 250, 20); 
+      Serial.println("turn left"); 
+    }
+  }
+  else {
+      motor(250, 250, 20); 
+      Serial.println("straight"); 
+    }  
 }
+
 bool dectect_tunnel(){
   if(ultrasound_side() < 20.0){
     return true;

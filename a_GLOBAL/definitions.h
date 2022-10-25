@@ -9,8 +9,8 @@
 // Pins for ultrasound
 #define US_trig 6 //green
 #define US_echo 7 //orange
-#define US_trig_s 12
-#define US_echo_s 11
+#define US_trig_s 12 //orange
+#define US_echo_s 11 //purple
 
 double ultrasound_front(bool raw= true);
 double ultrasound_side(bool raw= true);
