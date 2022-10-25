@@ -20,24 +20,8 @@ double Hz=10;
 FastPID line_PID(line_following_proportianal, line_following_integral, line_following_derivative , Hz, PID_output_bits , PID_output_signed);
 FastPID approach_PID(block_approach_proportianal, block_approach_integral, block_approach_derivative, Hz, PID_output_bits , PID_output_signed);
 
-bool have_block =false;
-bool magnetic_block = false;
+int LOCATION = 1; //refer to map
+int HAS_BLOCK = 0; //0 = no block, 1 = has block
+int MAGNETIC = -1; //-1 = no block, 0 = not magnetic, 1 = magnetic
+int IN_TUNNEL = 0; //0 = not in tunnel, 1 = in tunnel
 
-enum motor_select{
-  MOTOR_M1,
-  MOTOR_M2,
-  BOTH
-};
-struct motor_state{
-  byte direction; //foward =1 , back =2, 3 =brake, 4 = release
-  byte speed;
-}m1_state, m2_state;
-enum robotState{
-  START,
-  JUNCTION,
-  CROSS,
-  LINE_FOLLOWING,
-  APROACH_BLOCK,
-  GRAB_BLOCK,
-  TUNNEL,
-}robot_state;

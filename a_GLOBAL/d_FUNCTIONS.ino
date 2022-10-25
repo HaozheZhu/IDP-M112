@@ -12,14 +12,8 @@ void init_motors() {
     while (1);
   }
   Serial.println("Motor Shield found.");
-  M1->setSpeed(250);
-  M2->setSpeed(250);
   M1->run(RELEASE);
   M2->run(RELEASE);
-  m1_state.direction = RELEASE;
-  m2_state.direction = RELEASE;
-  m1_state.speed = 250;
-  m2_state.speed = 250;
 }
 
 void init_hall(){
@@ -48,123 +42,65 @@ double ultrasound_side(bool raw){
     return running_total;
   }
 }
-void motor_release(motor_select motors = BOTH){
-  switch(motors){
-    case BOTH:
-      if (m1_state.direction !=RELEASE){
-        M1->run(RELEASE);
-        m1_state.direction =RELEASE;
-      }
-      if (m2_state.direction !=RELEASE){
-        M2->run(RELEASE);
-        m2_state.direction =RELEASE;
-      }
-      break;
-    case MOTOR_M1:      
-      if (m1_state.direction !=RELEASE){
-        M1->run(RELEASE);
-        m1_state.direction =RELEASE;
-      }
-      break;  
-    case MOTOR_M2:
-      if (m1_state.direction !=RELEASE){
-        M1->run(RELEASE);
-        m1_state.direction =RELEASE;
-      }
-      break;
 
-    default:
-    Serial.println ("Error in motor_release, invalid selection of motors -  Must be BOTYH, LEFT or RIGHT");
-  }
-}
-void motor_interface(byte  m1_dir, byte m2_dir, byte m1_speed, byte m2_speed){
-  //prevents unneeded comunication with motors
-  //first update direction
-  if ((m1_state.direction != m1_dir) and (m2_state.direction != m2_dir)){
-    if ((m1_state.direction != RELEASE)or(m2_state.direction!=RELEASE)){
-      motor_release(BOTH);
-      delay(5);
-      M1->run(m1_dir);
-      m1_state.direction= m1_dir;
-      M2->run(m2_dir);
-      m2_state.direction= m2_dir;
-    }
-  }
-  else if (m1_state.direction != m1_dir){
-    if (m1_state.direction != RELEASE){
-      motor_release(MOTOR_M1);
-      delay(5);
-    }
-    M1->run(m1_dir);
-    m1_state.direction= m1_dir;
-  }
-  else if (m2_state.direction != m2_dir){
-    if (m2_state.direction != RELEASE){
-      motor_release(MOTOR_M2);
-      delay(5);
-    }
-    M2->run(m2_dir);
-    m2_state.direction= m2_dir;
-  }
-  
-  //Then check speeds
-  if (m1_state.speed !=m1_speed){
-    M1->setSpeed(m1_speed);
-    m1_state.speed = m1_speed;
-  }
-  if(m2_state.speed !=m2_speed){
-    M2->setSpeed(m2_speed);
-    m2_state.speed = m2_speed;
-  }
-}
-
-
-void motor(int target_speed, int angle_velocity, int timestep){
-  // speed, foward is positive; angular velocity: anti-clockwise is positive. 
-  double m1, m2;
-  m1 = (target_speed+angle_velocity);
-  m2 = (target_speed-angle_velocity);
-
-  M1->setSpeed(m1);
-  M2->setSpeed(m2);
-  
-  if (m1<0 and m2<0){
-    M1->run(BACKWARD);
-    M2->run(BACKWARD);
-  }
-  else if (m1<0 and m2 >=0){
-    M1->run(BACKWARD);
-    M2->run(FORWARD);
-  }
-   else if (m1>=0 and m2 <0){
+void motor(int m1, int m2, int dt) {
+  Serial.println(m1); 
+  Serial.println(m2); 
+  if(m1>=0 && m2>=0){
+    M1->setSpeed(abs(m1)); 
+    M2->setSpeed(abs(m2)); 
     M1->run(FORWARD);
-    M2->run(BACKWARD);
+    M2->run(FORWARD); 
+    delay(dt);  
+    M1->run(RELEASE); 
+    M2->run(RELEASE); 
   }
-  else
-  {
-      M1->run(FORWARD);
-      M2->run(FORWARD); 
+  else if(m1<=0 && m2>=0){
+    M1->setSpeed(abs(m1)); 
+    M2->setSpeed(abs(m2)); 
+    M1->run(BACKWARD);
+    M2->run(FORWARD); 
+    delay(dt);  
+    M1->run(RELEASE); 
+    M2->run(RELEASE); 
   }
+  else if(m1>=0 && m2<=0){
+    M1->setSpeed(abs(m1)); 
+    M2->setSpeed(abs(m2)); 
+    M1->run(FORWARD);
+    M2->run(BACKWARD); 
+    delay(dt);  
+    M1->run(RELEASE); 
+    M2->run(RELEASE); 
+  }
+} 
 
-  delay(timestep);
-  M1->run(RELEASE);
-  M2->run(RELEASE); 
-}
 
-
-void follow_line(int speed, int angular, int timestep) {
+void follow_line(int forward, int turn, int dt) {
   int line_sensor_2_value = digitalRead(line_sensor_2); 
   int line_sensor_3_value = digitalRead(line_sensor_3); 
-
-  if(line_sensor_2_value==1 && line_sensor_3_value==0){
-    motor(speed, -angular, timestep); 
+  
+  if(line_sensor_2_value==0 && line_sensor_3_value==0){
+    motor(forward, forward, dt); 
+  }
+  else if(line_sensor_2_value==1 && line_sensor_3_value==0){
+    motor(turn, forward, dt); 
   }
   else if(line_sensor_2_value==0 && line_sensor_3_value==1){
-    motor(speed, angular, timestep);
+    motor(forward, turn, dt); 
   }
-  else{
-    motor(speed, 0, timestep); 
-  }
+}
+
+void handle_cross() {
+  Serial.println("At cross"); 
+}
+
+void handle_left_junction() {
+  Serial.println("At left junction"); 
+}
+
+void handle_right_junction() {
+  Serial.println("At right junction"); 
 }
 
 void nav_once() {
@@ -174,43 +110,32 @@ void nav_once() {
   int line_sensor_4_value = digitalRead(line_sensor_4); 
   
   if(line_sensor_1_value == 0 && line_sensor_4_value == 0) {
-    //follow line
-    Serial.println("Following line"); 
-    follow_line(100,100,100); 
+    Serial.println("Following line straight"); 
+    follow_line(250,0,100); 
   }
   else {
     //at junctions
     if(line_sensor_1_value == 1 && line_sensor_4_value == 1) {
-      Serial.println("At cross"); 
-      delay(3000); 
-      follow_line(250,0,500); 
+      handle_cross(); 
     }
     if(line_sensor_1_value == 1 && line_sensor_4_value == 0) {
-      follow_line(100,0,500);
-      delay(1000);
+      motor(250, 250, 200); 
+      delay(2000);
       if(line_sensor_1_value == 1 && line_sensor_4_value == 1) {
-        Serial.println("At cross"); 
-        delay(3000); 
-        follow_line(250,0,500); 
+        handle_cross(); 
       }
       else if(line_sensor_1_value == 1 && line_sensor_4_value == 0) {
-        Serial.println("At left junction"); 
-        delay(10000); 
-        follow_line(250,0,500); 
+        handle_left_junction(); 
       }
     }
     if(line_sensor_1_value == 0 && line_sensor_4_value == 1) {
-      follow_line(100,0,500);
-      delay(1000); 
+      motor(250, 250, 200); 
+      delay(2000); 
       if(line_sensor_1_value == 1 && line_sensor_4_value == 1) {
-        Serial.println("At cross"); 
-        delay(3000); 
-        follow_line(250,0,500); 
+        handle_cross(); 
       }
       else if(line_sensor_1_value == 0 && line_sensor_4_value == 1) {
-        Serial.println("At right junction"); 
-        delay(3000); 
-        follow_line(250,0,500); 
+        handle_right_junction(); 
       }
     }
   }
