@@ -137,8 +137,8 @@ void nav_once() {
 
 void follow_wall(double target_dist){
   static FastPID wall_PID(15 ,0.05 , 0 , 10, 8 , true);
-  target_dist = wall_PID.step(5, ultrasound_side(true));
-  motor(150, target_dist, 50);
+  target_dist = wall_PID.step(5, US_side.dist());
+  motor(250, target_dist, 50);
 }
 bool dectect_tunnel(){
   if(ultrasound_side() < 20.0){
