@@ -24,3 +24,4 @@ int LOCATION = 1; //refer to map
 int HAS_BLOCK = 0; //0 = no block, 1 = has block
 int MAGNETIC = -1; //-1 = no block, 0 = not magnetic, 1 = magnetic
 int IN_TUNNEL = 0; //0 = not in tunnel, 1 = in tunnel
+
