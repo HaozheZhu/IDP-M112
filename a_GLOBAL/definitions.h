@@ -11,16 +11,6 @@
 #define US_echo 7 //orange
 #define US_trig_s 12
 #define US_echo_s 11
-//Constants for PID controller setup
-#define PID_output_bits 8
-#define PID_output_signed true
-#define line_following_proportianal 1
-#define line_following_integral 0.1
-#define line_following_derivative 0.1
-//Block approach
-#define block_approach_proportianal 15.
-#define block_approach_integral 0.2
-#define block_approach_derivative 0.1
 
 double ultrasound_front(bool raw= true);
 double ultrasound_side(bool raw= true);
