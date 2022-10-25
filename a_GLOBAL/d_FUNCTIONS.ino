@@ -44,7 +44,9 @@ double ultrasound_side(bool raw){
 }
 
 void motor(int m1, int m2, int dt) {
-  if(m1>0 && m2>0){
+  Serial.println(m1); 
+  Serial.println(m2); 
+  if(m1>=0 && m2>=0){
     M1->setSpeed(abs(m1)); 
     M2->setSpeed(abs(m2)); 
     M1->run(FORWARD);
@@ -53,7 +55,7 @@ void motor(int m1, int m2, int dt) {
     M1->run(RELEASE); 
     M2->run(RELEASE); 
   }
-  else if(m1<0 && m2>0){
+  else if(m1<=0 && m2>=0){
     M1->setSpeed(abs(m1)); 
     M2->setSpeed(abs(m2)); 
     M1->run(BACKWARD);
@@ -62,7 +64,7 @@ void motor(int m1, int m2, int dt) {
     M1->run(RELEASE); 
     M2->run(RELEASE); 
   }
-  else if(m1>0 && m2<0){
+  else if(m1>=0 && m2<=0){
     M1->setSpeed(abs(m1)); 
     M2->setSpeed(abs(m2)); 
     M1->run(FORWARD);
