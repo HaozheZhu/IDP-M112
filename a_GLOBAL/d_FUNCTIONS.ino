@@ -20,32 +20,26 @@ void init_hall(){
   pinMode(hall_pin, INPUT); 
 }
 
-double ultrasound_front(bool raw){
-  static double running_total =0;
-  static HCSR04 sensor(US_trig, US_echo);
-  if (raw){
-    return sensor.dist();
-  }
-  else{
-    running_total = 0.5*(sensor.dist()+running_total);
-    return running_total;
-  }
+void grab_block() {
+  servo_lift.write(127); 
+  delay(1000); 
+
+  servo_grab.write(114); 
+  delay(1000); 
+
+  servo_lift.write(150); 
+  delay(2000); 
 }
-double ultrasound_side(bool raw){
-  static double running_total =0;
-  static HCSR04 sensor(US_trig_s, US_echo_s);
-  if (raw){
-    return sensor.dist();
-  }
-  else{
-    running_total = 0.5*(sensor.dist()+running_total);
-    return running_total;
-  }
+
+void release_block() {
+  servo_lift.write(127); 
+  delay(1000); 
+
+  servo_grab.write(58); 
+  delay(2000);
 }
 
 void motor(int m1, int m2, int dt) {
-  Serial.println(m1); 
-  Serial.println(m2); 
   if(m1>=0 && m2>=0){
     M1->setSpeed(abs(m1)); 
     M2->setSpeed(abs(m2)); 
@@ -140,17 +134,6 @@ void nav_once() {
     }
   }
 }  
-
-bool block_approach_line(){
-  //Best activated when the block is closeset
-  double dist_front = ultrasound_front(1); 
-  if (dist_front<5.0){
-    M1->run(BRAKE);
-    M2->run(BRAKE);
-    return true;
-  }
-  return false;
-}
 
 void follow_wall(double target_dist){
   static FastPID wall_PID(15 ,0.05 , 0 , 10, 8 , true);

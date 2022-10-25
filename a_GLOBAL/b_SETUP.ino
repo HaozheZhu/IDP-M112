@@ -3,8 +3,11 @@ void setup() {
   init_line_sensors(); 
   init_motors(); 
   init_hall(); 
-  M1->run(FORWARD);
-  M2->run(FORWARD); 
+  servo_grab.attach(9); //servo 2
+  servo_lift.attach(10); //servo 1
+  servo_lift.write(150); 
+  servo_grab.write(58);    
+  delay(10000);
 
   //robot starting routine
   if(0){

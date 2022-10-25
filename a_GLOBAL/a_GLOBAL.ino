@@ -1,12 +1,14 @@
 #include <Adafruit_MotorShield.h>
 #include "definitions.h"
 #include <HCSR04.h>
+#include <Servo.h>
 
-//initialise U/S sensor
-/*
+Servo servo_grab; 
+Servo servo_lift; 
+
 HCSR04 US_front(US_trig, US_echo);
-HCSR04 US_right(US_trig_r,US_echo_r);
-*/
+HCSR04 US_side(US_trig_s,US_echo_s);
+
 #include <FastPID.h>
 
 //initialise motors
