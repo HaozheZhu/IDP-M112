@@ -96,7 +96,7 @@ void handle_junction() {
       break; 
     case 2: 
       location = 3; 
-      Serial.println("At position 3 now"); 
+      Serial.println("At position 3 now, turning right"); 
       delay(1000); 
       motor(250, 250, 500); 
       delay(1000); 
@@ -106,6 +106,10 @@ void handle_junction() {
       break; 
     case 3: 
       location = 4; 
+      motor(250, 250, 500); 
+      break; 
+    case 4: 
+      location = 7; 
       motor(250, 250, 500); 
       break; 
     default: 
@@ -121,7 +125,7 @@ void nav_once() {
     follow_line(250,0,100); 
   }
   else {
-      handle_junction(); 
+    handle_junction(); 
   }
 }  
 
