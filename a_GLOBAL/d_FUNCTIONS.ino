@@ -112,6 +112,9 @@ void handle_junction() {
       location = 7; 
       motor(250, 250, 500); 
       break; 
+    case 7: 
+      while(1); 
+      break; 
     default: 
       Serial.println("Position error! "); 
       while(1); 
@@ -129,32 +132,28 @@ void nav_once() {
   }
 }  
 
-void follow_wall(double target_dist, double dist){ 
-  if(dist>2.0){
-    if(dist<target_dist) {
-      motor(250, 150, 20); 
-      Serial.println("turn right"); 
-    }
-    else if(dist>target_dist) {
-      motor(150, 250, 20); 
-      Serial.println("turn left"); 
-    }
+void handle_ramp() {
+  while(location==4 && digitalRead(line_sensor_2)==0 && digitalRead(line_sensor_1)==0 && digitalRead(line_sensor_3)==0) {
+    follow_wall(5.0); 
   }
-  else {
-      motor(250, 250, 20); 
-      Serial.println("straight"); 
-    }  
 }
 
 void handle_tunnel() {
+  while(location==7 && digitalRead(line_sensor_2)==0 && digitalRead(line_sensor_1)==0 && digitalRead(line_sensor_3)==0) {
+    follow_wall(5.0); 
+  }
+}
+
+void follow_wall(double target_dist) { 
   double dist_side = US_side.dist(); 
-  Serial.print("out of tunnel, dist_side:  ");
   Serial.println(dist_side); 
-  while(dist_side < 6) {
-    dist_side = US_side.dist(); 
-    follow_wall(5.0, dist_side); 
-    Serial.print("in tunnel: ");
-    Serial.println(dist_side); 
+  if(dist_side<target_dist) {
+    motor(250, 150, 20); 
+    Serial.println("turn right"); 
+  }
+  else if(dist_side>target_dist) {
+    motor(150, 250, 20); 
+    Serial.println("turn left"); 
   }
 }
 
