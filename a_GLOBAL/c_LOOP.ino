@@ -2,18 +2,20 @@ void loop() {
   //nav_once(); 
   follow_line(250, 0, 100); 
 
-  Serial.print("out of tunnel ");
-
-  double dist = US_side.dist(); 
-  Serial.println(dist); 
-  while(dist < 10) {
-    dist = US_side.dist(); 
-    follow_wall(5.0, dist); 
+  double dist_side = US_side.dist(); 
+  Serial.print("out of tunnel, dist_side:  ");
+  Serial.println(dist_side); 
+  while(dist_side < 6) {
+    dist_side = US_side.dist(); 
+    follow_wall(5.0, dist_side); 
     Serial.print("in tunnel: ");
-    Serial.println(dist); 
+    Serial.println(dist_side); 
   }
   
-  if(US_front.dist()<3.5){
+  double dist_front = US_front.dist(); 
+  Serial.print("dist_front: ");
+  Serial.println(dist_front); 
+  if(dist_front<3.5){
     Serial.println(US_front.dist()); 
     grab_block(); 
     delay(2000); 

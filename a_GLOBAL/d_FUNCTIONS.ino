@@ -21,7 +21,7 @@ void init_hall(){
 }
 
 void grab_block() {
-  servo_lift.write(127); 
+  servo_lift.write(124); 
   delay(1000); 
 
   servo_grab.write(114); 
@@ -32,7 +32,7 @@ void grab_block() {
 }
 
 void release_block() {
-  servo_lift.write(127); 
+  servo_lift.write(124); 
   delay(1000); 
 
   servo_grab.write(58); 
