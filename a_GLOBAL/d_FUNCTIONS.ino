@@ -96,7 +96,7 @@ void handle_junction() {
       break; 
     case 2: 
       location = 3; 
-      Serial.println("At position 3 now, turning right"); 
+      Serial.println("At position 14 now, turning right"); 
       delay(1000); 
       motor(250, 250, 500); 
       delay(1000); 
@@ -104,11 +104,29 @@ void handle_junction() {
         motor(250, -250, 100); 
       }
       break; 
+    case 14: 
+      location = 3; 
+      Serial.println("At position 3 now, keep rotating"); 
+      while(digitalRead(line_sensor_3)==0){
+        motor(250, -250, 100); 
+      }
+      motor(250, -250, 500); 
+      break; 
     case 3: 
       location = 4; 
-      motor(250, 250, 500); 
+      Serial.println("At position 4 now"); 
+      motor(250, 250, 400); 
       break; 
     case 4: 
+      location = 5; 
+      Serial.println("At position 5 now"); 
+      motor(250, 250, 2000); 
+      break; 
+    case 5: 
+      location = 6; 
+      motor(250, 250, 2000); 
+      break; 
+    case 6: 
       location = 7; 
       motor(250, 250, 500); 
       break; 
@@ -123,8 +141,8 @@ void handle_junction() {
 
 void nav_once() {
   int line_sensor_4_value = digitalRead(line_sensor_4); 
+  Serial.println(location); 
   if(line_sensor_4_value == 0) {
-    Serial.println("Following line straight"); 
     follow_line(250,0,100); 
   }
   else {
@@ -134,12 +152,14 @@ void nav_once() {
 
 void handle_ramp() {
   while(location==4 && digitalRead(line_sensor_2)==0 && digitalRead(line_sensor_1)==0 && digitalRead(line_sensor_3)==0) {
+    Serial.println("on ramp"); 
     follow_wall(5.0); 
   }
 }
 
 void handle_tunnel() {
   while(location==7 && digitalRead(line_sensor_2)==0 && digitalRead(line_sensor_1)==0 && digitalRead(line_sensor_3)==0) {
+    Serial.println("in tunnel"); 
     follow_wall(5.0); 
   }
 }
@@ -164,8 +184,8 @@ void handle_block() {
   if(dist_front<3.5){
     Serial.println(US_front.dist()); 
     grab_block(); 
-    delay(2000); 
-    release_block(); 
-    while(1);
+    //delay(1000); 
+    //release_block(); 
+    //while(1);
   }
 }
