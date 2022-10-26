@@ -4,8 +4,8 @@
 #include <Arduino_LSM6DS3.h>
 #include <Servo.h>
 
-Servo servo_grab; 
-Servo servo_lift; 
+Servo servo_grab; //servo 2
+Servo servo_lift; //servo 1
 
 HCSR04 US_front(US_trig, US_echo);
 HCSR04 US_side(US_trig_s,US_echo_s);
