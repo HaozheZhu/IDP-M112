@@ -95,7 +95,7 @@ void handle_junction() {
       motor(250, 250, 500); 
       break; 
     case 2: 
-      location = 3; 
+      location = 14; 
       Serial.println("At position 14 now, turning right"); 
       delay(1000); 
       motor(250, 250, 500); 
@@ -120,11 +120,11 @@ void handle_junction() {
     case 4: 
       location = 5; 
       Serial.println("At position 5 now"); 
-      motor(250, 250, 2000); 
+      motor(250, 250, 3000); 
       break; 
     case 5: 
       location = 6; 
-      motor(250, 250, 2000); 
+      motor(250, 250, 3000); 
       break; 
     case 6: 
       location = 7; 
@@ -153,14 +153,14 @@ void nav_once() {
 void handle_ramp() {
   while(location==4 && digitalRead(line_sensor_2)==0 && digitalRead(line_sensor_1)==0 && digitalRead(line_sensor_3)==0) {
     Serial.println("on ramp"); 
-    follow_wall(5.0); 
+    follow_wall(8); 
   }
 }
 
 void handle_tunnel() {
   while(location==7 && digitalRead(line_sensor_2)==0 && digitalRead(line_sensor_1)==0 && digitalRead(line_sensor_3)==0) {
     Serial.println("in tunnel"); 
-    follow_wall(5.0); 
+    follow_wall(5); 
   }
 }
 
@@ -168,12 +168,12 @@ void follow_wall(double target_dist) {
   double dist_side = US_side.dist(); 
   Serial.println(dist_side); 
   if(dist_side<target_dist) {
-    motor(250, 150, 20); 
-    Serial.println("turn right"); 
-  }
-  else if(dist_side>target_dist) {
     motor(150, 250, 20); 
     Serial.println("turn left"); 
+  }
+  else if(dist_side>target_dist) {
+    motor(250, 150, 20); 
+    Serial.println("turn right"); 
   }
 }
 
