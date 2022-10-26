@@ -12,7 +12,3 @@
 #define US_trig_s 12 //orange
 #define US_echo_s 11 //purple
 
-double ultrasound_front(bool raw= true);
-double ultrasound_side(bool raw= true);
-bool block_approach_line();
-bool dectect_tunnel();
