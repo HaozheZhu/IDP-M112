@@ -85,16 +85,33 @@ void follow_line(int forward, int turn, int dt) {
   }
 }
 
-void handle_cross() {
-  Serial.println("At cross"); 
-}
-
-void handle_left_junction() {
-  Serial.println("At left junction"); 
-}
-
-void handle_right_junction() {
-  Serial.println("At right junction"); 
+void handle_junction() {
+  Serial.println("At junction"); 
+  switch(location){
+    case 1: 
+      location = 2; 
+      Serial.println("At position 2 now"); 
+      delay(3000); 
+      motor(250, 250, 500); 
+      break; 
+    case 2: 
+      location = 3; 
+      Serial.println("At position 3 now"); 
+      delay(1000); 
+      motor(250, 250, 500); 
+      delay(1000); 
+      while(digitalRead(line_sensor_3)==0){
+        motor(250, -250, 100); 
+      }
+      break; 
+    case 3: 
+      location = 4; 
+      motor(250, 250, 500); 
+      break; 
+    default: 
+      Serial.println("Position error! "); 
+      while(1); 
+  }
 }
 
 void nav_once() {
@@ -109,28 +126,8 @@ void nav_once() {
   }
   else {
     //at junctions
-    if(line_sensor_1_value == 1 && line_sensor_4_value == 1) {
-      handle_cross(); 
-    }
-    if(line_sensor_1_value == 1 && line_sensor_4_value == 0) {
-      motor(250, 250, 200); 
-      delay(2000);
-      if(line_sensor_1_value == 1 && line_sensor_4_value == 1) {
-        handle_cross(); 
-      }
-      else if(line_sensor_1_value == 1 && line_sensor_4_value == 0) {
-        handle_left_junction(); 
-      }
-    }
-    if(line_sensor_1_value == 0 && line_sensor_4_value == 1) {
-      motor(250, 250, 200); 
-      delay(2000); 
-      if(line_sensor_1_value == 1 && line_sensor_4_value == 1) {
-        handle_cross(); 
-      }
-      else if(line_sensor_1_value == 0 && line_sensor_4_value == 1) {
-        handle_right_junction(); 
-      }
+    if(line_sensor_4_value == 1) {
+      handle_junction(); 
     }
   }
 }  
@@ -150,11 +147,4 @@ void follow_wall(double target_dist, double dist){
       motor(250, 250, 20); 
       Serial.println("straight"); 
     }  
-}
-
-bool dectect_tunnel(){
-  if(ultrasound_side() < 20.0){
-    return true;
-  }
-  else{return false;}
 }
