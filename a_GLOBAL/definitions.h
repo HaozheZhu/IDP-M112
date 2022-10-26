@@ -12,3 +12,8 @@
 #define US_trig_s 12 //orange
 #define US_echo_s 13 //purple
 
+#define start_button A0
+#define orange_led 8
+#define red_led 9
+#define green_led 10
+#define hall_sensor 11
