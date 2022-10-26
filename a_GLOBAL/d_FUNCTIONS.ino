@@ -91,7 +91,7 @@ void handle_junction() {
     case 1: 
       location = 2; 
       Serial.println("At position 2 now"); 
-      delay(3000); 
+      delay(1000); 
       motor(250, 250, 500); 
       break; 
     case 2: 
@@ -115,20 +115,13 @@ void handle_junction() {
 }
 
 void nav_once() {
-  int line_sensor_1_value = digitalRead(line_sensor_1); 
-  int line_sensor_2_value = digitalRead(line_sensor_2); 
-  int line_sensor_3_value = digitalRead(line_sensor_3); 
   int line_sensor_4_value = digitalRead(line_sensor_4); 
-  
-  if(line_sensor_1_value == 0 && line_sensor_4_value == 0) {
+  if(line_sensor_4_value == 0) {
     Serial.println("Following line straight"); 
     follow_line(250,0,100); 
   }
   else {
-    //at junctions
-    if(line_sensor_4_value == 1) {
       handle_junction(); 
-    }
   }
 }  
 
@@ -147,4 +140,29 @@ void follow_wall(double target_dist, double dist){
       motor(250, 250, 20); 
       Serial.println("straight"); 
     }  
+}
+
+void handle_tunnel() {
+  double dist_side = US_side.dist(); 
+  Serial.print("out of tunnel, dist_side:  ");
+  Serial.println(dist_side); 
+  while(dist_side < 6) {
+    dist_side = US_side.dist(); 
+    follow_wall(5.0, dist_side); 
+    Serial.print("in tunnel: ");
+    Serial.println(dist_side); 
+  }
+}
+
+void handle_block() {
+  double dist_front = US_front.dist(); 
+  Serial.print("dist_front: ");
+  Serial.println(dist_front); 
+  if(dist_front<3.5){
+    Serial.println(US_front.dist()); 
+    grab_block(); 
+    delay(2000); 
+    release_block(); 
+    while(1);
+  }
 }
