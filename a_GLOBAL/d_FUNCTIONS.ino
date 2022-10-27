@@ -17,13 +17,33 @@ void init_motors() {
 }
 
 void init_hall(){
-  pinMode(hall_pin, INPUT); 
+  pinMode(hall_sensor, INPUT); 
+}
+
+void init_servo() {
+  servo_grab.attach(9); //servo 2
+  servo_lift.attach(10); //servo 1
+  servo_lift.write(150); 
+  servo_grab.write(58); 
+}
+
+void init_button() {
+  pinMode(start_button, INPUT); 
+  while(analogRead(start_button) > 500); 
 }
 
 void grab_block() {
   servo_lift.write(124); 
   delay(1000); 
-
+  for(int i=58; i<114; i+=2) {
+    servo_grab.write(i); 
+    delay(100); 
+    if(analogRead(hall_sensor)>500) {
+      digitalWrite(red_led, HIGH); 
+      break; 
+    }
+  }
+  delay(5000); 
   servo_grab.write(114); 
   delay(1000); 
 

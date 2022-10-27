@@ -5,7 +5,7 @@
 //Servo pins for sheild
 #define servo_pin_one 9
 #define servo_pin_two 10 
-#define hall_pin 11 // Temp, here to allow compilation
+
 // Pins for ultrasound
 #define US_trig 6 //green
 #define US_echo 7 //orange
@@ -13,7 +13,7 @@
 #define US_echo_s 13 //purple
 
 #define start_button A0
-#define orange_led 8
-#define red_led 9
-#define green_led 10
-#define hall_sensor 11
+#define orange_led A4
+#define red_led A3
+#define green_led A2
+#define hall_sensor A1
