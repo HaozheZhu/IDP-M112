@@ -3,11 +3,8 @@ void setup() {
   init_line_sensors(); 
   init_motors(); 
   init_hall(); 
-  servo_grab.attach(9); //servo 2
-  servo_lift.attach(10); //servo 1
-  servo_lift.write(150); 
-  servo_grab.write(58);    
-  pinMode(start_button, INPUT); 
-  while(analogRead(start_button) > 500); 
-
+  init_servo();
+  init_button(); 
+  pinMode(A3, OUTPUT); 
+  digitalWrite(A3, LOW); 
 }
