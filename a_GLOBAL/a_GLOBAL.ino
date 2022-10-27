@@ -18,7 +18,7 @@ Adafruit_DCMotor *M1 = AFMS.getMotor(1);
 Adafruit_DCMotor *M2 = AFMS.getMotor(2);
 
 
-int location = 6; //refer to map
+int location = 1; //refer to map
 bool has_block = 0; //0 = no block, 1 = has block
 bool magnetic = 0; //-1 = no block, 0 = not magnetic, 1 = magnetic
 bool in_tunnel = 0; //0 = not in tunnel, 1 = in tunnel

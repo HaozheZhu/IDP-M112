@@ -39,7 +39,7 @@ void grab_block() {
     servo_grab.write(i); 
     delay(100); 
     if(analogRead(hall_sensor)>500) {
-      digitalWrite(red_led, HIGH); 
+      digitalWrite(A3, HIGH); 
       break; 
     }
   }

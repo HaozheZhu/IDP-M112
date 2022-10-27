@@ -5,5 +5,6 @@ void setup() {
   init_hall(); 
   init_servo();
   init_button(); 
-
+  pinMode(A3, OUTPUT); 
+  digitalWrite(A3, LOW); 
 }
