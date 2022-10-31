@@ -131,7 +131,7 @@ void handle_junction() {
     case 7: 
       if(has_block && !magnetic) {
         location = 10; 
-        turn_right(); 
+        turn_right_green(); 
       }
       else {
         location = 9; 
@@ -153,7 +153,7 @@ void handle_junction() {
     case 15: 
       if(has_block && magnetic) {
         location = 12; 
-        turn_right(); 
+        turn_right_red(); 
       }
       else {
         location = 4; 
@@ -173,10 +173,22 @@ void handle_junction() {
   }
 }
 
-void turn_right() {
+void turn_right_green() {
   delay(1000); 
   motor(250, 250, 1000); 
   delay(1000); 
+  while(digitalRead(line_sensor_3)==0){
+    motor(250, -250, 100); 
+    delay(10); 
+  }
+  motor(250, -250, 150); 
+}
+
+void turn_right_red() {
+  delay(1000); 
+  motor(250, 250, 1000); 
+  delay(1000); 
+  motor(250,-250, 1000); 
   while(digitalRead(line_sensor_3)==0){
     motor(250, -250, 100); 
     delay(10); 
@@ -231,7 +243,7 @@ void handle_block() {
     servo_lift.write(121); 
     delay(1000); 
   }
-  if(dist_front<4){
+  if(dist_front<3.5){
     Serial.println(US_front.dist()); 
     grab_block(); 
   }
