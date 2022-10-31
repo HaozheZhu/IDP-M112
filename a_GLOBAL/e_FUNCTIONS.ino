@@ -239,4 +239,8 @@ void release_block() {
   has_block = 0; 
 
   servo_lift.write(150); 
+  delay(1000); 
+
+  digitalWrite(red_led, LOW); 
+  digitalWrite(grab_block, LOW); 
 }
