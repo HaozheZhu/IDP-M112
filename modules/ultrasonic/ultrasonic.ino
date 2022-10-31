@@ -11,7 +11,7 @@ void setup()
   Serial.begin(9600); 
   servo_grab.attach(9); //servo 2
   servo_lift.attach(10); //servo 1
-  servo_lift.write(150); 
+  servo_lift.write(155); 
   servo_grab.write(60);    
   delay(2000);
 

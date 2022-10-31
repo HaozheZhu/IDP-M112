@@ -9,8 +9,8 @@ void setup() {
 
   servo_grab.attach(9); //servo 2
   servo_lift.attach(10); //servo 1
-  servo_lift.write(124); 
-  servo_grab.write(58);    
+  servo_lift.write(121); 
+  servo_grab.write(68);    
   delay(2000);
 }
 

@@ -23,40 +23,13 @@ void init_hall(){
 void init_servo() {
   servo_grab.attach(9); //servo 2
   servo_lift.attach(10); //servo 1
-  servo_lift.write(150); 
+  servo_lift.write(155); 
   servo_grab.write(58); 
 }
 
 void init_button() {
   pinMode(start_button, INPUT); 
   while(analogRead(start_button) > 500); 
-}
-
-void grab_block() {
-  servo_lift.write(124); 
-  delay(1000); 
-  for(int i=58; i<114; i+=2) {
-    servo_grab.write(i); 
-    delay(100); 
-    if(analogRead(hall_sensor)>500) {
-      digitalWrite(A3, HIGH); 
-      break; 
-    }
-  }
-  delay(5000); 
-  servo_grab.write(114); 
-  delay(1000); 
-
-  servo_lift.write(150); 
-  delay(2000); 
-}
-
-void release_block() {
-  servo_lift.write(124); 
-  delay(1000); 
-
-  servo_grab.write(58); 
-  delay(2000);
 }
 
 void motor(int m1, int m2, int dt) {
@@ -103,6 +76,9 @@ void follow_line(int forward, int turn, int dt) {
   else if(line_sensor_2_value==0 && line_sensor_3_value==1){
     motor(forward, turn, dt); 
   }
+  else {
+    motor(forward, forward, dt); 
+  }
 }
 
 void handle_junction() {
@@ -115,14 +91,16 @@ void handle_junction() {
       motor(250, 250, 500); 
       break; 
     case 2: 
-      location = 14; 
-      Serial.println("At position 14 now, turning right"); 
+      location = 3; 
+      Serial.println("At position 3 now, turning right"); 
       delay(1000); 
-      motor(250, 250, 500); 
+      motor(250, 250, 1000); 
       delay(1000); 
       while(digitalRead(line_sensor_3)==0){
         motor(250, -250, 100); 
+        delay(10); 
       }
+      motor(250, -250, 150); 
       break; 
     case 14: 
       location = 3; 
@@ -151,12 +129,59 @@ void handle_junction() {
       motor(250, 250, 500); 
       break; 
     case 7: 
-      while(1); 
+      if(has_block && !magnetic) {
+        location = 10; 
+        turn_right(); 
+      }
+      else {
+        location = 9; 
+        motor(250, 250, 300); 
+      }
       break; 
+    case 9: 
+      location = 15; 
+      motor(250, 250, 300); 
+      break; 
+    case 10: 
+      motor(250, 0, 200); 
+      motor(250, 250, 500); 
+      Serial.println("Dropping non-magnetic block"); 
+      release_block(); 
+      has_block = 0; 
+      delay(1000); 
+      while(1);
+    case 15: 
+      if(has_block && magnetic) {
+        location = 12; 
+        turn_right(); 
+      }
+      else {
+        location = 4; 
+        motor(250, 250, 500); 
+      }
+    case 12: 
+      motor(250, 0, 200); 
+      motor(250, 250, 500); 
+      Serial.println("Dropping magnetic block"); 
+      release_block(); 
+      has_block = 0; 
+      delay(1000); 
+      while(1); 
     default: 
       Serial.println("Position error! "); 
       while(1); 
   }
+}
+
+void turn_right() {
+  delay(1000); 
+  motor(250, 250, 1000); 
+  delay(1000); 
+  while(digitalRead(line_sensor_3)==0){
+    motor(250, -250, 100); 
+    delay(10); 
+  }
+  motor(250, -250, 150); 
 }
 
 void nav_once() {
@@ -201,11 +226,49 @@ void handle_block() {
   double dist_front = US_front.dist(); 
   Serial.print("dist_front: ");
   Serial.println(dist_front); 
-  if(dist_front<3.5){
+  if(dist_front<20 && !has_block && servo_lift.read()-121>5) {
+    delay(1000); 
+    servo_lift.write(121); 
+    delay(1000); 
+  }
+  if(dist_front<4){
     Serial.println(US_front.dist()); 
     grab_block(); 
-    //delay(1000); 
-    //release_block(); 
-    //while(1);
   }
+}
+
+void grab_block() {
+  delay(1000); 
+  int value = analogRead(hall_sensor); 
+  Serial.println(value); 
+  if(value>500) {
+    digitalWrite(red_led, HIGH);  
+    magnetic = 1; 
+    Serial.println("magnetic! "); 
+  }
+  else {
+    digitalWrite(green_led, HIGH); 
+    magnetic = 0; 
+
+    Serial.println("NOT magnetic! "); 
+  }
+  has_block = 1; 
+  delay(5000); 
+
+  servo_lift.write(124); 
+  delay(1000); 
+  servo_grab.write(114); 
+  delay(1000); 
+  servo_lift.write(150); 
+  delay(1000); 
+}
+
+void release_block() {
+  servo_lift.write(124); 
+  delay(1000); 
+
+  servo_grab.write(58); 
+  delay(2000);
+
+  has_block = 0; 
 }
