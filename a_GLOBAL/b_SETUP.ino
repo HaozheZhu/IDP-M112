@@ -10,4 +10,5 @@ void setup() {
   Serial.println("READY"); 
 
   init_button(); 
+  digitalWrite(amber_led, HIGH); 
 }

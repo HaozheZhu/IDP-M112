@@ -55,6 +55,24 @@ void follow_line(int forward, int turn, int dt) {
   }
 }
 
+void follow_line_return(int forward, int turn, int dt) {
+  int line_sensor_1_value = digitalRead(line_sensor_1); 
+  int line_sensor_4_value = digitalRead(line_sensor_4); 
+  
+  if(line_sensor_1_value==0 && line_sensor_4_value==0){
+    motor(forward, forward, dt); 
+  }
+  else if(line_sensor_1_value==1 && line_sensor_4_value==0){
+    motor(turn, forward, dt); 
+  }
+  else if(line_sensor_1_value==0 && line_sensor_4_value==1){
+    motor(forward, turn, dt); 
+  }
+  else {
+    motor(forward, forward, dt); 
+  }
+}
+
 void handle_junction() {
   Serial.println("At junction"); 
   switch(location){
@@ -96,8 +114,15 @@ void handle_junction() {
       break; 
     case 7: 
       if(has_block && !magnetic) {
-        location = 10; 
+        location = 9; 
         turn_right_green(); 
+        release_block(); 
+        motor(-250, -250, 2000); 
+        while(digitalRead(line_sensor_4)==0){
+        motor(-250, 250, 100); 
+        }
+        motor(250, 250, 1000); 
+        motor(0, 250, 400); 
       }
       else {
         location = 9; 
@@ -132,7 +157,12 @@ void handle_junction() {
       release_block(); 
       has_block = 0; 
       delay(1000); 
+      motor(-250, -250, 2000); 
+      while(digitalRead(line_sensor_4)==0){
+        motor(-250, 250, 100); 
+      }
       while(1);
+      break; 
     case 15: 
       if(has_block && magnetic) {
         location = 12; 
@@ -153,10 +183,30 @@ void handle_junction() {
       while(digitalRead(line_sensor_4)==0) {
         motor(-250, -250, 100); 
       }
+      motor(250, 250, 500); 
       delay(1000); 
-      motor(-250, 250, 500); 
-      location = 3; 
-
+      motor(250, -250, 800);      
+      while(digitalRead(line_sensor_1)==0) {
+        motor(250, -250, 100);   
+      } 
+      while(digitalRead(line_sensor_2)==0) {
+        follow_line_return(250,0,50); 
+      }
+      motor(250, 250, 500); 
+      motor(0, 250, 2800); 
+      while(1){
+        delay(100); 
+        double dist_front = US_front.dist(); 
+        Serial.println(dist_front); 
+        if(dist_front > 10) {
+        motor(150, 150, 100); 
+        }
+        else {
+          break; 
+        }
+      }
+      digitalWrite(amber_led, LOW); 
+      while(1); 
       break; 
     default: 
       Serial.println("Position error! "); 
@@ -166,13 +216,8 @@ void handle_junction() {
 
 void turn_right_green() {
   delay(1000); 
-  motor(250, 250, 600); 
-  delay(1000); 
-  while(digitalRead(line_sensor_3)==0){
-    motor(250, -250, 100); 
-    delay(10); 
-  }
-  motor(250, -250, 150); 
+  motor(250, -250, 1000);
+  motor(250, 250, 1000); 
 }
 
 void turn_right_red() {
@@ -261,7 +306,7 @@ void grab_block() {
 
   servo_grab.write(114); 
   delay(1000); 
-  servo_lift.write(150); 
+  servo_lift.write(155); 
   delay(1000); 
 }
 
@@ -273,7 +318,7 @@ void release_block() {
   delay(2000);
   has_block = 0; 
 
-  servo_lift.write(150); 
+  servo_lift.write(155); 
   delay(1000); 
 
   digitalWrite(red_led, LOW); 

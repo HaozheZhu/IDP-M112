@@ -36,4 +36,6 @@ void init_led() {
   digitalWrite(red_led, LOW); 
   pinMode(green_led, OUTPUT); 
   digitalWrite(green_led, LOW); 
+  pinMode(amber_led, OUTPUT); 
+  digitalWrite(amber_led, LOW); 
 }
