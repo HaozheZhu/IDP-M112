@@ -13,7 +13,7 @@
 #define US_echo_s 13 //purple
 
 #define start_button A0
-#define orange_led A4
+#define amber_led 8
 #define red_led A3
 #define green_led A2
 #define hall_sensor A1

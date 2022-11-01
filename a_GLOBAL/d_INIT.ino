@@ -11,7 +11,6 @@ void init_motors() {
     Serial.println("Could not find Motor Shield. Check wiring.");
     while (1);
   }
-  Serial.println("Motor Shield found.");
   M1->run(RELEASE);
   M2->run(RELEASE);
 }
@@ -37,4 +36,6 @@ void init_led() {
   digitalWrite(red_led, LOW); 
   pinMode(green_led, OUTPUT); 
   digitalWrite(green_led, LOW); 
+  pinMode(amber_led, OUTPUT); 
+  digitalWrite(amber_led, LOW); 
 }
