@@ -11,7 +11,6 @@ void init_motors() {
     Serial.println("Could not find Motor Shield. Check wiring.");
     while (1);
   }
-  Serial.println("Motor Shield found.");
   M1->run(RELEASE);
   M2->run(RELEASE);
 }

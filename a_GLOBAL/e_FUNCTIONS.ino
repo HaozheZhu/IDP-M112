@@ -26,6 +26,15 @@ void motor(int m1, int m2, int dt) {
     M1->run(RELEASE); 
     M2->run(RELEASE); 
   }
+  else {
+    M1->setSpeed(abs(m1)); 
+    M2->setSpeed(abs(m2)); 
+    M1->run(BACKWARD);
+    M2->run(BACKWARD); 
+    delay(dt);  
+    M1->run(RELEASE); 
+    M2->run(RELEASE); 
+  }
 } 
 
 void follow_line(int forward, int turn, int dt) {
@@ -96,8 +105,25 @@ void handle_junction() {
       }
       break; 
     case 9: 
-      location = 15; 
-      motor(250, 250, 300); 
+      if(has_block){
+        location = 15; 
+        motor(250, 250, 300); 
+      }
+      else {
+        turn_right_red(); 
+        motor(250, 0, 200); 
+        double dist_front = US_front.dist(); 
+        Serial.println(dist_front); 
+        while(1){ 
+          delay(100); 
+          double dist_front = US_front.dist(); 
+          Serial.println(dist_front); 
+          if(dist_front > 10) {
+          motor(150, 150, 100); 
+          }
+        }     
+      }
+      
       break; 
     case 10: 
       motor(250, 0, 200); 
@@ -121,9 +147,17 @@ void handle_junction() {
       motor(250, 250, 500); 
       Serial.println("Dropping magnetic block"); 
       release_block(); 
-      has_block = 0; 
       delay(1000); 
-      while(1); 
+      Serial.println("Released block"); 
+      motor(-250, -250, 2000); 
+      while(digitalRead(line_sensor_4)==0) {
+        motor(-250, -250, 100); 
+      }
+      delay(1000); 
+      motor(-250, 250, 500); 
+      location = 3; 
+
+      break; 
     default: 
       Serial.println("Position error! "); 
       while(1); 
@@ -150,7 +184,7 @@ void turn_right_red() {
     motor(250, -250, 100); 
     delay(10); 
   }
-  motor(250, -250, 150); 
+  motor(250, -250, 300); 
 }
 
 void nav_once() {
@@ -181,12 +215,13 @@ void handle_tunnel() {
 void follow_wall(double target_dist) { 
   double dist_side = US_side.dist(); 
   Serial.println(dist_side); 
+  delay(50); 
   if(dist_side<target_dist) {
-    motor(150, 250, 20); 
+    motor(150, 250, 50); 
     Serial.println("turn left"); 
   }
   else if(dist_side>target_dist) {
-    motor(250, 150, 20); 
+    motor(250, 150, 50); 
     Serial.println("turn right"); 
   }
 }
