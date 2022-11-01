@@ -146,7 +146,12 @@ void handle_junction() {
           if(dist_front > 10) {
           motor(150, 150, 100); 
           }
-        }     
+          else {
+            break; 
+          }
+        }
+        digitalWrite(amber_led, LOW); 
+        while(1); 
       }
       
       break; 
